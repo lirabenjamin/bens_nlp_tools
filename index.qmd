@@ -26,7 +26,9 @@ Usually, cells represent counts, but they can also represent other things, like 
 
 ## Text is not normally distributed
 
-Word frequency distributions follow Zipf distributions, meaning that the most common words are **very** common, and all the other words basically **never** happen. I spent hours trying to debug some code that wasn't printing words on a word cloud, only to realize that the words were there, but they were so small that they were invisible.
+Word frequency distributions follow Zipf distributions, meaning that the most common words are **very** common, and all the other words basically **never** happen. This means that the second most common word in a language will appear approximately half as often as the most common word. The third most common word will appear about a third as often, and so forth.
+
+I have spent hours trying to debug some code that wasn't printing words on a word cloud, only to realize that the words were there, but they were so small that they were invisible.
 
 ## Tokenization
 
@@ -121,6 +123,22 @@ You can also think of topic modeling as matrix factorization. You start with a D
 ![Topic Modeling as Matrix Factorization. See [here](https://arxiv.org/pdf/1706.05084.pdf)](topic_models.png)  
 
 Latent Dirichlet Allocation (LDA), Correlated Topic Modeling, and Structural Topic Modeling are all ways of doing this. I usually do this on R. See attached R script for an example, based on [AJ Alvero's](https://soccrim.clas.ufl.edu/aj-alvero/) [paper](https://www.science.org/doi/pdf/10.1126/sciadv.abi9031) and see [this paper](https://www.jstatsoft.org/article/view/v040i13) for a comparison of the different methods.
+
+The topics can be interpreted with the LDAvis package. See below for an example.
+
+<iframe width="1300" height="800" src="test/LDAvis/index.html" frameborder="0"></iframe>
+
+The output is a dataframe with the topic proportions for each document. It may look something like the following. Note that topic modeling is soft-clustering: Each document is a mixture of topics, so each document will have some proportion of each topic. The sum of all topics adds to one.
+  
+```{r}  
+#| warning: false
+#| echo: false
+#| message: false
+tibble(text = c("Document 1", "Document 2", "Document 3"), topic1 = c(0.5, 0.2, 0.3), topic2 = c(0.2, 0.3, 0.5), topic3 = c(0.3, 0.2, 0.5)) %>%
+  gt::gt()
+```
+
+```
 
 ## GPT-coding
 

@@ -119,7 +119,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="text-is-not-normally-distributed" class="level2">
 <h2 class="anchored" data-anchor-id="text-is-not-normally-distributed">Text is not normally distributed</h2>
-<p>Word frequency distributions follow Zipf distributions, meaning that the most common words are <strong>very</strong> common, and all the other words basically <strong>never</strong> happen. I spent hours trying to debug some code that wasn’t printing words on a word cloud, only to realize that the words were there, but they were so small that they were invisible.</p>
+<p>Word frequency distributions follow Zipf distributions, meaning that the most common words are <strong>very</strong> common, and all the other words basically <strong>never</strong> happen. This means that the second most common word in a language will appear approximately half as often as the most common word. The third most common word will appear about a third as often, and so forth.</p>
+<p>I have spent hours trying to debug some code that wasn’t printing words on a word cloud, only to realize that the words were there, but they were so small that they were invisible.</p>
 </section>
 <section id="tokenization" class="level2">
 <h2 class="anchored" data-anchor-id="tokenization">Tokenization</h2>
@@ -199,44 +200,30 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
 </figure>
 </div>
 <p>Latent Dirichlet Allocation (LDA), Correlated Topic Modeling, and Structural Topic Modeling are all ways of doing this. I usually do this on R. See attached R script for an example, based on <a href="https://soccrim.clas.ufl.edu/aj-alvero/">AJ Alvero’s</a> <a href="https://www.science.org/doi/pdf/10.1126/sciadv.abi9031">paper</a> and see <a href="https://www.jstatsoft.org/article/view/v040i13">this paper</a> for a comparison of the different methods.</p>
-</section>
-<section id="gpt-coding" class="level2">
-<h2 class="anchored" data-anchor-id="gpt-coding">GPT-coding</h2>
-<p>I have created a function that will take care of this for you. See example usage below:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>openai.api_key <span class="op">=</span> <span class="st">"YOUR_OPENAI_API_KEY"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data.csv"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>custom_prompt <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">I will show you a comment a participant in a scientific study gave to a vignette in which the following happens.</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">Tom tells Jeff that his car broke down in a rural place.</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">Jeff tells Tom that he read a meta-analysis that shows that people who live in rural places are more likely to helpful.</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">The participant wrote a comment about this vignette, about what Jeff is doing.</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">Please respond with a 1 if the participant believes that Jeff is providing an explanation for why Tom's car broke down.</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">Respond with a 0 if the participant does not believe that Jeff is providing an explanation for why Tom's car broke down.</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">Your response should be formatted as a python dictionary, with spaces for the rating and an explanation for it.</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>ratings_df <span class="op">=</span> generate_ratings(data, <span class="st">"id"</span>, <span class="st">"comments"</span>, custom_prompt, <span class="st">"data/ratings_binary"</span>, verbose<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>ratings_df.to_csv(<span class="st">"ratings_binary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will produce a dataset like the one shown below.</p>
+<p>The topics can be interpreted with the LDAvis package. See below for an example.</p>
+<iframe width="1300" height="800" src="test/LDAvis/index.html" frameborder="0">
+</iframe>
+<p>The output is a dataframe with the topic proportions for each document. It may look something like the following. Note that topic modeling is soft-clustering: Each document is a mixture of topics, so each document will have some proportion of each topic. The sum of all topics adds to one.</p>
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="dbxuesplll" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#dbxuesplll table {
+<div id="yaeaqgbbxx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yaeaqgbbxx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#dbxuesplll thead, #dbxuesplll tbody, #dbxuesplll tfoot, #dbxuesplll tr, #dbxuesplll td, #dbxuesplll th {
+#yaeaqgbbxx thead, #yaeaqgbbxx tbody, #yaeaqgbbxx tfoot, #yaeaqgbbxx tr, #yaeaqgbbxx td, #yaeaqgbbxx th {
   border-style: none;
 }
 
-#dbxuesplll p {
+#yaeaqgbbxx p {
   margin: 0;
   padding: 0;
 }
 
-#dbxuesplll .gt_table {
+#yaeaqgbbxx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -262,12 +249,12 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-left-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_caption {
+#yaeaqgbbxx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#dbxuesplll .gt_title {
+#yaeaqgbbxx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -279,7 +266,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-width: 0;
 }
 
-#dbxuesplll .gt_subtitle {
+#yaeaqgbbxx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -291,7 +278,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-top-width: 0;
 }
 
-#dbxuesplll .gt_heading {
+#yaeaqgbbxx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -303,13 +290,13 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_bottom_border {
+#yaeaqgbbxx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_col_headings {
+#yaeaqgbbxx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -324,7 +311,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_col_heading {
+#yaeaqgbbxx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -344,7 +331,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   overflow-x: hidden;
 }
 
-#dbxuesplll .gt_column_spanner_outer {
+#yaeaqgbbxx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -356,15 +343,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 4px;
 }
 
-#dbxuesplll .gt_column_spanner_outer:first-child {
+#yaeaqgbbxx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dbxuesplll .gt_column_spanner_outer:last-child {
+#yaeaqgbbxx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dbxuesplll .gt_column_spanner {
+#yaeaqgbbxx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -376,11 +363,11 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   width: 100%;
 }
 
-#dbxuesplll .gt_spanner_row {
+#yaeaqgbbxx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#dbxuesplll .gt_group_heading {
+#yaeaqgbbxx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -406,7 +393,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   text-align: left;
 }
 
-#dbxuesplll .gt_empty_group_heading {
+#yaeaqgbbxx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -421,15 +408,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   vertical-align: middle;
 }
 
-#dbxuesplll .gt_from_md > :first-child {
+#yaeaqgbbxx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dbxuesplll .gt_from_md > :last-child {
+#yaeaqgbbxx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dbxuesplll .gt_row {
+#yaeaqgbbxx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -448,7 +435,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   overflow-x: hidden;
 }
 
-#dbxuesplll .gt_stub {
+#yaeaqgbbxx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -461,7 +448,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#dbxuesplll .gt_stub_row_group {
+#yaeaqgbbxx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -475,15 +462,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   vertical-align: top;
 }
 
-#dbxuesplll .gt_row_group_first td {
+#yaeaqgbbxx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dbxuesplll .gt_row_group_first th {
+#yaeaqgbbxx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#dbxuesplll .gt_summary_row {
+#yaeaqgbbxx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -493,16 +480,16 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#dbxuesplll .gt_first_summary_row {
+#yaeaqgbbxx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_first_summary_row.thick {
+#yaeaqgbbxx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dbxuesplll .gt_last_summary_row {
+#yaeaqgbbxx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -512,7 +499,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_grand_summary_row {
+#yaeaqgbbxx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -522,7 +509,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#dbxuesplll .gt_first_grand_summary_row {
+#yaeaqgbbxx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -532,7 +519,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-top-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_last_grand_summary_row_top {
+#yaeaqgbbxx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -542,11 +529,11 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_striped {
+#yaeaqgbbxx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dbxuesplll .gt_table_body {
+#yaeaqgbbxx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -555,7 +542,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_footnotes {
+#yaeaqgbbxx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -569,7 +556,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_footnote {
+#yaeaqgbbxx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -578,7 +565,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#dbxuesplll .gt_sourcenotes {
+#yaeaqgbbxx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -592,7 +579,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#dbxuesplll .gt_sourcenote {
+#yaeaqgbbxx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -600,63 +587,556 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#dbxuesplll .gt_left {
+#yaeaqgbbxx .gt_left {
   text-align: left;
 }
 
-#dbxuesplll .gt_center {
+#yaeaqgbbxx .gt_center {
   text-align: center;
 }
 
-#dbxuesplll .gt_right {
+#yaeaqgbbxx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dbxuesplll .gt_font_normal {
+#yaeaqgbbxx .gt_font_normal {
   font-weight: normal;
 }
 
-#dbxuesplll .gt_font_bold {
+#yaeaqgbbxx .gt_font_bold {
   font-weight: bold;
 }
 
-#dbxuesplll .gt_font_italic {
+#yaeaqgbbxx .gt_font_italic {
   font-style: italic;
 }
 
-#dbxuesplll .gt_super {
+#yaeaqgbbxx .gt_super {
   font-size: 65%;
 }
 
-#dbxuesplll .gt_footnote_marks {
+#yaeaqgbbxx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#dbxuesplll .gt_asterisk {
+#yaeaqgbbxx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dbxuesplll .gt_indent_1 {
+#yaeaqgbbxx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dbxuesplll .gt_indent_2 {
+#yaeaqgbbxx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dbxuesplll .gt_indent_3 {
+#yaeaqgbbxx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dbxuesplll .gt_indent_4 {
+#yaeaqgbbxx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dbxuesplll .gt_indent_5 {
+#yaeaqgbbxx .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="text">text</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="topic1">topic1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="topic2">topic2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="topic3">topic3</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="text" class="gt_row gt_left">Document 1</td>
+<td headers="topic1" class="gt_row gt_right">0.5</td>
+<td headers="topic2" class="gt_row gt_right">0.2</td>
+<td headers="topic3" class="gt_row gt_right">0.3</td></tr>
+    <tr><td headers="text" class="gt_row gt_left">Document 2</td>
+<td headers="topic1" class="gt_row gt_right">0.2</td>
+<td headers="topic2" class="gt_row gt_right">0.3</td>
+<td headers="topic3" class="gt_row gt_right">0.2</td></tr>
+    <tr><td headers="text" class="gt_row gt_left">Document 3</td>
+<td headers="topic1" class="gt_row gt_right">0.3</td>
+<td headers="topic2" class="gt_row gt_right">0.5</td>
+<td headers="topic3" class="gt_row gt_right">0.5</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<pre><code>
+## GPT-coding
+
+I have created a function that will take care of this for you. See example usage below:
+
+```python
+openai.api_key = "YOUR_OPENAI_API_KEY"
+data = pd.read_csv("data.csv")
+custom_prompt = """
+I will show you a comment a participant in a scientific study gave to a vignette in which the following happens.
+Tom tells Jeff that his car broke down in a rural place.
+Jeff tells Tom that he read a meta-analysis that shows that people who live in rural places are more likely to helpful.
+The participant wrote a comment about this vignette, about what Jeff is doing.
+Please respond with a 1 if the participant believes that Jeff is providing an explanation for why Tom's car broke down.
+Respond with a 0 if the participant does not believe that Jeff is providing an explanation for why Tom's car broke down.
+Your response should be formatted as a python dictionary, with spaces for the rating and an explanation for it.
+"""
+ratings_df = generate_ratings(data, "id", "comments", custom_prompt, "data/ratings_binary", verbose=True)
+ratings_df.to_csv("ratings_binary.csv", index=False)</code></pre>
+<p>This will produce a dataset like the one shown below.</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="tnoaofyxci" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tnoaofyxci table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#tnoaofyxci thead, #tnoaofyxci tbody, #tnoaofyxci tfoot, #tnoaofyxci tr, #tnoaofyxci td, #tnoaofyxci th {
+  border-style: none;
+}
+
+#tnoaofyxci p {
+  margin: 0;
+  padding: 0;
+}
+
+#tnoaofyxci .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#tnoaofyxci .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#tnoaofyxci .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#tnoaofyxci .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#tnoaofyxci .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#tnoaofyxci .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#tnoaofyxci .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#tnoaofyxci .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#tnoaofyxci .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#tnoaofyxci .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#tnoaofyxci .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tnoaofyxci .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#tnoaofyxci .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#tnoaofyxci .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#tnoaofyxci .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tnoaofyxci .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#tnoaofyxci .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#tnoaofyxci .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#tnoaofyxci .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tnoaofyxci .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#tnoaofyxci .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tnoaofyxci .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#tnoaofyxci .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tnoaofyxci .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tnoaofyxci .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tnoaofyxci .gt_left {
+  text-align: left;
+}
+
+#tnoaofyxci .gt_center {
+  text-align: center;
+}
+
+#tnoaofyxci .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#tnoaofyxci .gt_font_normal {
+  font-weight: normal;
+}
+
+#tnoaofyxci .gt_font_bold {
+  font-weight: bold;
+}
+
+#tnoaofyxci .gt_font_italic {
+  font-style: italic;
+}
+
+#tnoaofyxci .gt_super {
+  font-size: 65%;
+}
+
+#tnoaofyxci .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#tnoaofyxci .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#tnoaofyxci .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#tnoaofyxci .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#tnoaofyxci .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#tnoaofyxci .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#tnoaofyxci .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

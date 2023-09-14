@@ -82,6 +82,9 @@ run_topic_model <- function(data, text_column, output_folder, sample = FALSE, sa
     trelliscopejs::facet_trelliscope(facets = "topic", scales = "free", path = glue("{output_folder}/topic_labels"))
     
     toLDAvis(processed_fit,processed_docs, out.dir = glue("{output_folder}/LDAvis/"), reorder.topics = TRUE)
+
+  # save enbirotnment
+  save.image(glue("{output_folder}/environment.RData"))
 }
 
 data = tibble(text = c(

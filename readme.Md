@@ -14,3 +14,4 @@ To install, complete the following steps:
 6. Copy the functions script `nlp_functions.py` to wherever you are working.
 7. Activate the `nlp` conda environment in your IDE or Jupyter Notebook.
 8. Import the functions script: `import nlp_functions as nlp`
+9. Use them!
