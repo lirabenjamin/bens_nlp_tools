@@ -1,0 +1,110 @@
+---
+title: Ben's NLP tools
+---
+
+# What is NLP?
+
+Natural language processing is simply analyzing text data. This can be as simple as counting words, or as complex as generating text. This is a short tutorial on some tools I've built to help analyze text data.
+
+# What kinds of things can you do with NLP?
+
+All kinds of things, but we'll focus on three things:
+
+1. De-identifying text. This is important for protecting the privacy of your participants. You can use NLP to remove names, places, institutions, etc. from text data.
+2. Classifying text. This is important for understanding what people are talking about. You can use NLP to classify text into different categories.
+3. Clustering text. You can use NLP to group text into different categories.
+
+# Some basic concepts
+
+## Lingo
+
+A **corpus** is a collection of pieces of text, which are usually referred to as **documents.** Each corpus or model has an associated **vocabulary** which is the set of all possible words that the model can understand or that occur in that topic. 
+
+A **document term matrix** is a matrix that represents a corpus. It has as many rows as documents there are in the corpus, and as many columns as there are words in the vocabulary. Each cell in the matrix represents the number of times that word appears in that document. For example, if the word "the" appears 5 times in the first document, then the first row, first column cell would be 5.
+
+Usually, cells represent counts, but they can also represent other things, like TF-IDF scores, or binary scores.
+
+## Text is not normally distributed
+
+Word frequency distributions follow Zipf distributions, meaning that the most common words are **very** common, and all the other words basically **never** happen. I spent hours trying to debug some code that wasn't printing words on a word cloud, only to realize that the words were there, but they were so small that they were invisible.
+
+## Tokenization
+
+Tokenization is the process of splitting text into whatever the unit of analysis will be, often words or parts of words, but could also be sentences, or paragraphs.
+
+## Pre-processing: Stop words, Stemming, Lemmatization
+
+Because of the way text is distributed, we often want to remove the most common words, called stop words. We also often want to reduce words to their root form, called stemming or lemmatization. For example, "running" and "ran" would both be reduced to "run". Stemming simply chops words, Lemmaization uses a dictionary to reduce words to their root form.
+
+## Vectorization: Bag of Words, TF-IDF
+
+Vectorization is the process of turning text into numbers. The simplest way to do this is to count the number of times each word appears in a document. This is called a bag of words. A more sophisticated way to do this is to count the number of times each word appears in a document, but then divide that by the number of documents that word appears in. This is called TF-IDF. The formula is below.
+
+$$
+\text{TF-IDF} = \text{TF} \times \text{IDF}
+
+TF = \frac{\text{Number of times word appears in document}}{\text{Total number of words in document}}
+
+IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents that word appears in}}}
+
+$$
+
+# Some methods
+
+## Dictionary Methods
+
+Dictionary methods simply count words. For example a dictionary for happiness could be `[like, love, great, awesome,...]`. Then you would count the number of times each word in the dictionary appears in a document. Documents that have a higher count of words in the dictionary are assumed to be more happy.
+
+### LIWC
+
+Linguistic Inquiry and Word Count is software that has a lot pre-validated dictionaries. It is a GUI application that costs around 120 USD. If you have it installed, you can call it from within python with the following function. It will return a dataframe with the LIWC scores for each document.
+
+```python 
+process_dataframe_with_liwc(
+  df: pd.DataFrame, 
+  id_column:str, 
+  text_column: str, 
+  save_to_csv: bool = False, 
+  output_filename: str = 'liwc_output.csv'
+  ) -> pd.DataFrame:
+```
+
+### Custom dictionaries
+
+You can build your own dictionaries. You probably will need to validate them. I have a function that will do this for you. It will return a dataframe with the dictionary scores for each document.
+
+## Using Named Entity Recognition to sanitize text
+
+Entities refer to special kinds of words or phrases like names, places, instituions, numbers, etc. that can be identified by a model. For example, the sentence "I live in New York" contains the entity "New York" which can be identified by a model.
+
+You can **train** your own NER mode, to detect any kind of entity, but we won't go into this now. Instead, we will use a pre-trained model from the [spaCy](https://spacy.io/) library to deidentify text.
+
+What counts as deidentified? My advice---ask the IRB. The lowest bar is removing any two word names (e.g., "John Smith", but "John" would not be removed). Higher bars may require eliminating all names, places and institutions.
+
+```python
+
+```
+
+## Topic Modeling
+
+You can think of topic modeling as factor analysis for documents. Based on the patterns of word co-occurrences, the model will identify topics. Each topic is a set of words that tend to co-occur. Each document is a mixture of topics. For example, a document about politics might be 50% politics, 30% sports, 20% entertainment. Each word in the document is assumed to be generated by one of the topics. For example, the word "election" might be generated by the politics topic, but the word "ball" might be generated by the sports topic.
+
+You can also think of topic modeling as matrix factorization. You start with a Document-Term Matrix which is $n\times v$. $n$ is the number of documents, and $v$ is the size of the vocabulary. You then factorize this matrix into two matrices, $n\times k$ and $k\times v$. $k$ is the number of topics. The first matrix represents the topic proportions for each document, and the second matrix represents the word proportions for each topic.
+
+Latent Dirichlet Allocation (LDA), Correlated Topic Modeling, and Structural Topic Modeling are all ways of doing this.
+
+## Embeddings
+
+## GPT-coding
+
+I have created a function that will take care of this for you. See example usage below:
+
+```python
+openai.api_key = "YOUR_OPENAI_API_KEY"
+data = pd.read_csv("data.csv")
+custom_prompt = """
+Your custom prompt here...
+"""
+ratings_df = generate_ratings(data, "id", "comments", custom_prompt, "data/ratings_binary", verbose=True)
+ratings_df.to_csv("ratings_binary.csv", index=False)
+```
