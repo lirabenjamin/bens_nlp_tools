@@ -1,6 +1,12 @@
-# Add LIWC
 import pandas as pd
+import spacy
+from spacy import displacy
+import en_core_web_trf
+from tqdm import tqdm
+import swifter  # for faster pandas apply
+import spacy_transformers
 
+# 1. Add LIWC
 def process_dataframe_with_liwc(df: pd.DataFrame, id_column:str, text_column: str, save_to_csv: bool = False, output_filename: str = 'liwc_output.csv') -> pd.DataFrame:
     import pandas as pd
     import subprocess
@@ -39,20 +45,34 @@ def process_dataframe_with_liwc(df: pd.DataFrame, id_column:str, text_column: st
 
     return liwc_output
 
-df = pd.DataFrame({'some text' : ['this is some text', 'this is some more text'], 'id' : [1, 2]})
+# 2. custom dictionary: score with sum/ presence absence, tfidf or not. preprocess or not.
+def count_dictionary_matches(data, text_column, output_column = "results", mode="count", dictionary=None):
+    import pandas as pd
+    import re
+    if dictionary is None:
+        dictionary = []
 
-process_dataframe_with_liwc(df,'id', 'some text', save_to_csv=True, output_filename='liwc_output.csv')
-# custom dictionary: score with sum/ presence absence, tfidf or not. preprocess or not.
+    # Helper function to count matches in a text
+    def count_matches(text):
+        return sum(len(re.findall(pattern, text)) for pattern in dictionary)
 
-# Sanitize text
-import pandas as pd
-import spacy
-from spacy import displacy
-import en_core_web_trf
-from tqdm import tqdm
-import swifter  # for faster pandas apply
-import spacy_transformers
+    # Calculate matches for each row
+    data['matches'] = data[text_column].apply(count_matches)
 
+    # If mode is 'proportion', normalize the counts by word counts
+    if mode == "proportion":
+        data['word_counts'] = data[text_column].apply(lambda x: len(x.split()))
+        data[output_column] = data['matches'] / data['word_counts']
+    else:
+        data[output_column] = data['matches']
+
+    # Drop intermediate columns
+    data.drop(columns=['matches'], inplace=True, errors='ignore')
+    data.drop(columns=['word_counts'], inplace=True, errors='ignore')
+
+    return data
+
+# 3. Sanitize text
 # Initialize spacy model
 nlp = en_core_web_trf.load()
 
@@ -80,9 +100,7 @@ def replace_ner(text, level=1):
                 clean_text = clean_text[:ent.start_char] + "[PERSON]" + clean_text[ent.end_char:]
     return clean_text
 
-replace_ner("John Smith is a person.")
-
-def deidentify_dataframe(df, text_column, id_column=None, level=1, save=False, output_filename="deidentified_data.parquet"):
+def deidentify_dataframe(df, input_text_column, output_text_column, id_column=None, level=1, save=False, output_filename="deidentified_data.csv"):
     """
     Deidentify a pandas dataframe.
     
@@ -98,10 +116,10 @@ def deidentify_dataframe(df, text_column, id_column=None, level=1, save=False, o
     - pd.DataFrame: Deidentified dataframe
     """
     tqdm.pandas()  # Initialize tqdm for pandas
-    df['redacted'] = df[text_column].swifter.progress_bar(enable=True).apply(lambda x: replace_ner(x, level))
+    df[output_text_column] = df[input_text_column].swifter.progress_bar(enable=True).apply(lambda x: replace_ner(x, level))
     
     if save:
-        df.to_parquet(output_filename)
+        df.to_csv(output_filename)
         
     return df
 
@@ -171,3 +189,66 @@ def generate_ratings(data: pd.DataFrame, id_col: str, text_col: str, prompt: str
     df = df.merge(data, on=id_col)
 
     return df
+
+# utils word clouds
+def create_word_cloud(data, word_col, size_col, color_col, font_filename=None, title_font_size=30, log_scale=False, out=["png", "pdf"], output_file="wordcloud", plot_title="Word Cloud"):
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from wordcloud import WordCloud
+  from PIL import Image
+  from matplotlib.colors import LinearSegmentedColormap
+  import matplotlib.font_manager as fm
+
+    # Normalize the size and color columns
+    data['size_norm'] = data[size_col] / data[size_col].max()
+    if log_scale:
+        data[color_col] = np.log(data[color_col])
+    data['color_norm'] = (data[color_col] - data[color_col].min()) / (data[color_col].max() - data[color_col].min())
+
+    # Create a custom color map from gray to blue
+    custom_colors = LinearSegmentedColormap.from_list("custom_colors", ["gray", "darkblue"], N=256)
+
+    # Define a custom color function
+    def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+        freq = data.loc[data[word_col] == word, 'color_norm'].values[0]
+        r, g, b, _ = custom_colors(freq)
+        return int(r * 255), int(g * 255), int(b * 255)
+
+    # Create a dictionary with words and their corresponding sizes
+    word_sizes = data.set_index(word_col)['size_norm'].to_dict()
+
+    # Mask for the word cloud
+    x, y = np.ogrid[:288*3, :432*3]
+    mask = ((x - 144*3) ** 2 / (144*3) ** 2) + ((y - 216*3) ** 2 / (216*3) ** 2) > 1
+    mask = 255 * mask.astype(int)
+
+    # Load font if specified
+    if font_filename:
+        font_path = font_filename
+        font_prop = fm.FontProperties(fname=font_path)
+    else:
+        font_path = None
+        font_prop = None
+
+    # Generate the word cloud
+    wc = WordCloud(
+        background_color='white',
+        color_func=color_func,
+        prefer_horizontal=1,
+        width=800,
+        mask=mask,
+        font_path=font_path,
+        height=600
+    ).generate_from_frequencies(word_sizes)
+
+    # Display the word cloud
+    plt.figure(figsize=(8, 6), dpi=800)
+    plt.imshow(wc, interpolation='bilinear')
+    plt.axis("off")
+    plt.tight_layout(pad=0)
+    plt.title(plot_title, fontweight="bold", fontsize=title_font_size, fontproperties=font_prop)
+    if "pdf" in out:
+        plt.savefig(f"{output_file}.png", format="png", dpi=600, bbox_inches='tight', pad_inches=0)
+    if "png" in out:
+        plt.savefig(f"{output_file}.pdf", format="pdf", dpi=600, bbox_inches='tight', pad_inches=0)
+    plt.close()

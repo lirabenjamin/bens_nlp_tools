@@ -68,6 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -130,10 +132,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vectorization-bag-of-words-tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="vectorization-bag-of-words-tf-idf">Vectorization: Bag of Words, TF-IDF</h2>
 <p>Vectorization is the process of turning text into numbers. The simplest way to do this is to count the number of times each word appears in a document. This is called a bag of words. A more sophisticated way to do this is to count the number of times each word appears in a document, but then divide that by the number of documents that word appears in. This is called TF-IDF. The formula is below.</p>
-<p>$$ = </p>
-<p>TF = </p>
-<p>IDF = </p>
-<p>$$</p>
+<p><span class="math display">\[
+\text{TF-IDF} = \text{TF} \times \text{IDF}
+\]</span></p>
+<p><span class="math display">\[
+TF = \frac{\text{Number of times word appears in document}}{\text{Total number of words in document}}
+\]</span></p>
+<p><span class="math display">\[
+IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents that word appears in}}}
+\]</span></p>
 </section>
 </section>
 <section id="some-methods" class="level1">
@@ -155,6 +162,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="custom-dictionaries" class="level3">
 <h3 class="anchored" data-anchor-id="custom-dictionaries">Custom dictionaries</h3>
 <p>You can build your own dictionaries. You probably will need to validate them. I have a function that will do this for you. It will return a dataframe with the dictionary scores for each document.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> pd.DataFrame({<span class="st">"text"</span>: [<span class="st">"I love apples and oranges."</span>, <span class="st">"Bananas are great."</span>]})</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> dictionary <span class="op">=</span> [<span class="vs">r"apple"</span>, <span class="vs">r"orange"</span>, <span class="vs">r"banana"</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(count_dictionary_matches(data, <span class="st">"text"</span>, <span class="st">"count"</span>, dictionary))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                         text  results</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  I love apples <span class="kw">and</span> oranges.        <span class="dv">2</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>          Bananas are great.        <span class="dv">0</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(count_dictionary_matches(data, <span class="st">"text"</span>, <span class="st">"proportion"</span>, dictionary))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                         text  results</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  I love apples <span class="kw">and</span> oranges.      <span class="fl">0.4</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>          Bananas are great.      <span class="fl">0.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="using-named-entity-recognition-to-sanitize-text" class="level2">
@@ -162,26 +179,537 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Entities refer to special kinds of words or phrases like names, places, instituions, numbers, etc. that can be identified by a model. For example, the sentence “I live in New York” contains the entity “New York” which can be identified by a model.</p>
 <p>You can <strong>train</strong> your own NER mode, to detect any kind of entity, but we won’t go into this now. Instead, we will use a pre-trained model from the <a href="https://spacy.io/">spaCy</a> library to deidentify text.</p>
 <p>What counts as deidentified? My advice—ask the IRB. The lowest bar is removing any two word names (e.g., “John Smith”, but “John” would not be removed). Higher bars may require eliminating all names, places and institutions.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>replace_ner(<span class="st">"My name is Benjamin Lira"</span>, level <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "My name is [NAME]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can do this to a dataframe.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>deidentify_dataframe(df, input_text_column <span class="op">=</span> <span class="st">"some text column"</span>, output_text_column <span class="op">=</span> <span class="st">"redacted"</span>, id_column<span class="op">=</span><span class="va">None</span>, level<span class="op">=</span><span class="dv">1</span>, save<span class="op">=</span><span class="va">False</span>, output_filename<span class="op">=</span><span class="st">"deidentified_data.csv"</span>):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                               some text  <span class="bu">id</span>                          redacted</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  this <span class="kw">is</span> some text about Benjamin Lira   <span class="dv">1</span>  this <span class="kw">is</span> some text about [PERSON]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>                 this <span class="kw">is</span> some more text   <span class="dv">2</span>            this <span class="kw">is</span> some more text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="topic-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="topic-modeling">Topic Modeling</h2>
 <p>You can think of topic modeling as factor analysis for documents. Based on the patterns of word co-occurrences, the model will identify topics. Each topic is a set of words that tend to co-occur. Each document is a mixture of topics. For example, a document about politics might be 50% politics, 30% sports, 20% entertainment. Each word in the document is assumed to be generated by one of the topics. For example, the word “election” might be generated by the politics topic, but the word “ball” might be generated by the sports topic.</p>
-<p>You can also think of topic modeling as matrix factorization. You start with a Document-Term Matrix</p>
-</section>
-<section id="embeddings" class="level2">
-<h2 class="anchored" data-anchor-id="embeddings">Embeddings</h2>
+<p>Note that you cannot choose a priori what the topics should be (just like in exploratory factor analysis). Like in factor analysis you have to choose how many topics to extract, and once you get them, you have to interpret them.</p>
+<p>You can also think of topic modeling as matrix factorization. You start with a Document-Term Matrix which is <span class="math inline">\(n\times v\)</span>. <span class="math inline">\(n\)</span> is the number of documents, and <span class="math inline">\(v\)</span> is the size of the vocabulary. You then factorize this matrix into two matrices, <span class="math inline">\(n\times k\)</span> and <span class="math inline">\(k\times v\)</span>. <span class="math inline">\(k\)</span> is the number of topics. The first matrix represents the topic proportions for each document, and the second matrix represents the word proportions for each topic.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="topic_models.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Topic Modeling as Matrix Factorization. See <a href="https://arxiv.org/pdf/1706.05084.pdf">here</a></figcaption>
+</figure>
+</div>
+<p>Latent Dirichlet Allocation (LDA), Correlated Topic Modeling, and Structural Topic Modeling are all ways of doing this. I usually do this on R. See attached R script for an example, based on <a href="https://soccrim.clas.ufl.edu/aj-alvero/">AJ Alvero’s</a> <a href="https://www.science.org/doi/pdf/10.1126/sciadv.abi9031">paper</a> and see <a href="https://www.jstatsoft.org/article/view/v040i13">this paper</a> for a comparison of the different methods.</p>
 </section>
 <section id="gpt-coding" class="level2">
 <h2 class="anchored" data-anchor-id="gpt-coding">GPT-coding</h2>
 <p>I have created a function that will take care of this for you. See example usage below:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>openai.api_key <span class="op">=</span> <span class="st">"YOUR_OPENAI_API_KEY"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data.csv"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>custom_prompt <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">Your custom prompt here...</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ratings_df <span class="op">=</span> generate_ratings(data, <span class="st">"id"</span>, <span class="st">"comments"</span>, custom_prompt, <span class="st">"data/ratings_binary"</span>, verbose<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ratings_df.to_csv(<span class="st">"ratings_binary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>openai.api_key <span class="op">=</span> <span class="st">"YOUR_OPENAI_API_KEY"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data.csv"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>custom_prompt <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">I will show you a comment a participant in a scientific study gave to a vignette in which the following happens.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">Tom tells Jeff that his car broke down in a rural place.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">Jeff tells Tom that he read a meta-analysis that shows that people who live in rural places are more likely to helpful.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">The participant wrote a comment about this vignette, about what Jeff is doing.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">Please respond with a 1 if the participant believes that Jeff is providing an explanation for why Tom's car broke down.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">Respond with a 0 if the participant does not believe that Jeff is providing an explanation for why Tom's car broke down.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">Your response should be formatted as a python dictionary, with spaces for the rating and an explanation for it.</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>ratings_df <span class="op">=</span> generate_ratings(data, <span class="st">"id"</span>, <span class="st">"comments"</span>, custom_prompt, <span class="st">"data/ratings_binary"</span>, verbose<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>ratings_df.to_csv(<span class="st">"ratings_binary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will produce a dataset like the one shown below.</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="dbxuesplll" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dbxuesplll table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dbxuesplll thead, #dbxuesplll tbody, #dbxuesplll tfoot, #dbxuesplll tr, #dbxuesplll td, #dbxuesplll th {
+  border-style: none;
+}
+
+#dbxuesplll p {
+  margin: 0;
+  padding: 0;
+}
+
+#dbxuesplll .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dbxuesplll .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dbxuesplll .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dbxuesplll .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dbxuesplll .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dbxuesplll .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dbxuesplll .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dbxuesplll .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dbxuesplll .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dbxuesplll .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dbxuesplll .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dbxuesplll .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dbxuesplll .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dbxuesplll .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dbxuesplll .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dbxuesplll .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dbxuesplll .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dbxuesplll .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dbxuesplll .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dbxuesplll .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dbxuesplll .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dbxuesplll .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dbxuesplll .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dbxuesplll .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dbxuesplll .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dbxuesplll .gt_left {
+  text-align: left;
+}
+
+#dbxuesplll .gt_center {
+  text-align: center;
+}
+
+#dbxuesplll .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dbxuesplll .gt_font_normal {
+  font-weight: normal;
+}
+
+#dbxuesplll .gt_font_bold {
+  font-weight: bold;
+}
+
+#dbxuesplll .gt_font_italic {
+  font-style: italic;
+}
+
+#dbxuesplll .gt_super {
+  font-size: 65%;
+}
+
+#dbxuesplll .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dbxuesplll .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dbxuesplll .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dbxuesplll .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dbxuesplll .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dbxuesplll .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dbxuesplll .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="id">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="gpt_explanation">gpt_explanation</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="gpt_rating">gpt_rating</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="participant_comments">participant_comments</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="id" class="gt_row gt_right">50</td>
+<td headers="gpt_explanation" class="gt_row gt_left">The participant's comment does not indicate any belief that Jeff is providing an explanation for why Tom's car broke down. Rather, they are analyzing the relevance and validity of Jeff's response about the meta-analysis study on rural living.</td>
+<td headers="gpt_rating" class="gt_row gt_right">0</td>
+<td headers="participant_comments" class="gt_row gt_left">because it's a personal anecdote, the study could not draw that specific conclusion</td></tr>
+    <tr><td headers="id" class="gt_row gt_right">84</td>
+<td headers="gpt_explanation" class="gt_row gt_left">The participant does not refer to Jeff's action of providing an explanation for why Tom's car broke down. They instead discuss the apparent relationship between community size and observation in the situation, and the influence of people's personality.</td>
+<td headers="gpt_rating" class="gt_row gt_right">0</td>
+<td headers="participant_comments" class="gt_row gt_left">in smaller area, it's easier to observe anything happen in the community but the people's personality has a big role</td></tr>
+    <tr><td headers="id" class="gt_row gt_right">79</td>
+<td headers="gpt_explanation" class="gt_row gt_left">The participant's comment does not suggest that they believe Jeff is providing an explanation for why Tom's car broke down. Their comment is more focused on the reliability and applicability of Jeff's study in explaining why people stopped to help Tom, rather than providing a reason for the car breakdown.</td>
+<td headers="gpt_rating" class="gt_row gt_right">0</td>
+<td headers="participant_comments" class="gt_row gt_left">It showed that the research was wrong &amp; didn't explain why the people did stop to help Tom.</td></tr>
+    <tr><td headers="id" class="gt_row gt_right">62</td>
+<td headers="gpt_explanation" class="gt_row gt_left">The participant comments suggest that they think Jeff provided some insight about what Tom experienced. However, this is not directly an explanation for why Tom's car broke down but rather about the behavior of people in rural areas. Therefore, the rating is rather low.</td>
+<td headers="gpt_rating" class="gt_row gt_right">2</td>
+<td headers="participant_comments" class="gt_row gt_left">It provided some insight as to why Tom's event took place</td></tr>
+    <tr><td headers="id" class="gt_row gt_right">63</td>
+<td headers="gpt_explanation" class="gt_row gt_left">The participant doesn't mention anything about Jeff providing an explanation for why Tom's car broke down. The comment is more about the reliability of the information Jeff is providing about people in rural places.</td>
+<td headers="gpt_rating" class="gt_row gt_right">0</td>
+<td headers="participant_comments" class="gt_row gt_left">It's an interesting fact and relevant, but it could be wrong and needs more 'why?' I think.</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="word-clouds" class="level2">
+<h2 class="anchored" data-anchor-id="word-clouds">Word Clouds</h2>
+<p>While some people don’t like word clouds, I like them for displaying frequencies and some metric of importance (like model attribution scores, or correlations). Somehow, there is no great python function for this, so I made one that will take a dataframe with a column with words, and two other numeric columns to be mapped into size and color.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"word"</span> : [<span class="st">"word1"</span>, <span class="st">"word2"</span>, <span class="st">"word3"</span>, <span class="st">"word4"</span>, <span class="st">"word5"</span>, <span class="st">"word6"</span>, <span class="st">"word7"</span>, <span class="st">"word8"</span>, <span class="st">"word9"</span>, <span class="st">"word10"</span>],</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"size"</span> : [<span class="dv">100</span>, <span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">70</span>, <span class="dv">60</span>, <span class="dv">50</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>],</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"color"</span> : [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>create_word_cloud(df, <span class="st">"word"</span>, <span class="st">"size"</span>, <span class="st">"color"</span>, title_font_size<span class="op">=</span><span class="dv">130</span>, log_scale<span class="op">=</span><span class="va">False</span>, out<span class="op">=</span>[<span class="st">"png"</span>, <span class="st">"pdf"</span>], font_filename<span class="op">=</span><span class="st">"Myriad Pro Regular.ttf"</span>, output_file<span class="op">=</span><span class="st">"wordcloud"</span>, plot_title<span class="op">=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Produces this: <img src="wordcloud.png" class="img-fluid" alt="Example word cloud"></p>
 </section>
 </section>
 
