@@ -1,3 +1,4 @@
 data.parquet
 full.parquet
 .env
+IMDB Dataset.csv

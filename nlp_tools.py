@@ -198,40 +198,39 @@ def create_word_cloud(data, word_col, size_col, color_col, font_filename=None, t
   from PIL import Image
   from matplotlib.colors import LinearSegmentedColormap
   import matplotlib.font_manager as fm
-
-    # Normalize the size and color columns
-    data['size_norm'] = data[size_col] / data[size_col].max()
-    if log_scale:
-        data[color_col] = np.log(data[color_col])
-    data['color_norm'] = (data[color_col] - data[color_col].min()) / (data[color_col].max() - data[color_col].min())
+  # Normalize the size and color columns
+  data['size_norm'] = data[size_col] / data[size_col].max()
+  if log_scale:
+    data[color_col] = np.log(data[color_col])
+  data['color_norm'] = (data[color_col] - data[color_col].min()) / (data[color_col].max() - data[color_col].min())
 
     # Create a custom color map from gray to blue
-    custom_colors = LinearSegmentedColormap.from_list("custom_colors", ["gray", "darkblue"], N=256)
+  custom_colors = LinearSegmentedColormap.from_list("custom_colors", ["gray", "darkblue"], N=256)
 
-    # Define a custom color function
-    def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+  # Define a custom color function
+  def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
         freq = data.loc[data[word_col] == word, 'color_norm'].values[0]
         r, g, b, _ = custom_colors(freq)
         return int(r * 255), int(g * 255), int(b * 255)
 
     # Create a dictionary with words and their corresponding sizes
-    word_sizes = data.set_index(word_col)['size_norm'].to_dict()
+  word_sizes = data.set_index(word_col)['size_norm'].to_dict()
 
-    # Mask for the word cloud
-    x, y = np.ogrid[:288*3, :432*3]
-    mask = ((x - 144*3) ** 2 / (144*3) ** 2) + ((y - 216*3) ** 2 / (216*3) ** 2) > 1
-    mask = 255 * mask.astype(int)
+    # Mask for the word cloud 
+  x, y = np.ogrid[:288*3, :432*3]
+  mask = ((x - 144*3) ** 2 / (144*3) ** 2) + ((y - 216*3) ** 2 / (216*3) ** 2) > 1
+  mask = 255 * mask.astype(int)
 
     # Load font if specified
-    if font_filename:
+  if font_filename:
         font_path = font_filename
         font_prop = fm.FontProperties(fname=font_path)
-    else:
+  else:
         font_path = None
         font_prop = None
 
     # Generate the word cloud
-    wc = WordCloud(
+  wc = WordCloud(
         background_color='white',
         color_func=color_func,
         prefer_horizontal=1,
@@ -242,13 +241,13 @@ def create_word_cloud(data, word_col, size_col, color_col, font_filename=None, t
     ).generate_from_frequencies(word_sizes)
 
     # Display the word cloud
-    plt.figure(figsize=(8, 6), dpi=800)
-    plt.imshow(wc, interpolation='bilinear')
-    plt.axis("off")
-    plt.tight_layout(pad=0)
-    plt.title(plot_title, fontweight="bold", fontsize=title_font_size, fontproperties=font_prop)
-    if "pdf" in out:
-        plt.savefig(f"{output_file}.png", format="png", dpi=600, bbox_inches='tight', pad_inches=0)
-    if "png" in out:
-        plt.savefig(f"{output_file}.pdf", format="pdf", dpi=600, bbox_inches='tight', pad_inches=0)
-    plt.close()
+  plt.figure(figsize=(8, 6), dpi=800)
+  plt.imshow(wc, interpolation='bilinear')
+  plt.axis("off")
+  plt.tight_layout(pad=0)
+  plt.title(plot_title, fontweight="bold", fontsize=title_font_size, fontproperties=font_prop)
+  if "pdf" in out:
+    plt.savefig(f"{output_file}.png", format="png", dpi=600, bbox_inches='tight', pad_inches=0)
+  if "png" in out:
+    plt.savefig(f"{output_file}.pdf", format="pdf", dpi=600, bbox_inches='tight', pad_inches=0)
+  plt.close()

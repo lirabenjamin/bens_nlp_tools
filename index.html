@@ -96,6 +96,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<p>If you use functions here, please cite them!</p>
+<p>Lira, B. (2023). Ben’s NLP Tools (1.00) [R and Python code]. https://github.com/lirabenjamin/bens_nlp_tools</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">benjamin2023</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span> = {Ben's {{NLP Tools}}},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">author</span> = {Lira, Benjamin},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span> = {2023},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">month</span> = <span class="st">sep</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">urldate</span> = {2023-09-20}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="what-is-nlp" class="level1">
 <h1>What is NLP?</h1>
 <p>Natural language processing is simply analyzing text data. This can be as simple as counting words, or as complex as generating text. This is a short tutorial on some tools I’ve built to help analyze text data.</p>
@@ -152,27 +161,27 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
 <section id="liwc" class="level3">
 <h3 class="anchored" data-anchor-id="liwc">LIWC</h3>
 <p>Linguistic Inquiry and Word Count is software that has a lot pre-validated dictionaries. It is a GUI application that costs around 120 USD. If you have it installed, you can call it from within python with the following function. It will return a dataframe with the LIWC scores for each document.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>process_dataframe_with_liwc(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  df: pd.DataFrame, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  id_column:<span class="bu">str</span>, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  text_column: <span class="bu">str</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  save_to_csv: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  output_filename: <span class="bu">str</span> <span class="op">=</span> <span class="st">'liwc_output.csv'</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="op">-&gt;</span> pd.DataFrame:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>process_dataframe_with_liwc(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  df: pd.DataFrame, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  id_column:<span class="bu">str</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  text_column: <span class="bu">str</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  save_to_csv: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  output_filename: <span class="bu">str</span> <span class="op">=</span> <span class="st">'liwc_output.csv'</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="op">-&gt;</span> pd.DataFrame:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="custom-dictionaries" class="level3">
 <h3 class="anchored" data-anchor-id="custom-dictionaries">Custom dictionaries</h3>
 <p>You can build your own dictionaries. You probably will need to validate them. I have a function that will do this for you. It will return a dataframe with the dictionary scores for each document.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> pd.DataFrame({<span class="st">"text"</span>: [<span class="st">"I love apples and oranges."</span>, <span class="st">"Bananas are great."</span>]})</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> dictionary <span class="op">=</span> [<span class="vs">r"apple"</span>, <span class="vs">r"orange"</span>, <span class="vs">r"banana"</span>]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(count_dictionary_matches(data, <span class="st">"text"</span>, <span class="st">"count"</span>, dictionary))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                         text  results</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  I love apples <span class="kw">and</span> oranges.        <span class="dv">2</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>          Bananas are great.        <span class="dv">0</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(count_dictionary_matches(data, <span class="st">"text"</span>, <span class="st">"proportion"</span>, dictionary))</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                         text  results</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  I love apples <span class="kw">and</span> oranges.      <span class="fl">0.4</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>          Bananas are great.      <span class="fl">0.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> pd.DataFrame({<span class="st">"text"</span>: [<span class="st">"I love apples and oranges."</span>, <span class="st">"Bananas are great."</span>]})</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> dictionary <span class="op">=</span> [<span class="vs">r"apple"</span>, <span class="vs">r"orange"</span>, <span class="vs">r"banana"</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(count_dictionary_matches(data, <span class="st">"text"</span>, <span class="st">"count"</span>, dictionary))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                         text  results</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  I love apples <span class="kw">and</span> oranges.        <span class="dv">2</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>          Bananas are great.        <span class="dv">0</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(count_dictionary_matches(data, <span class="st">"text"</span>, <span class="st">"proportion"</span>, dictionary))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                         text  results</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  I love apples <span class="kw">and</span> oranges.      <span class="fl">0.4</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>          Bananas are great.      <span class="fl">0.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="using-named-entity-recognition-to-sanitize-text" class="level2">
@@ -180,13 +189,13 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
 <p>Entities refer to special kinds of words or phrases like names, places, instituions, numbers, etc. that can be identified by a model. For example, the sentence “I live in New York” contains the entity “New York” which can be identified by a model.</p>
 <p>You can <strong>train</strong> your own NER mode, to detect any kind of entity, but we won’t go into this now. Instead, we will use a pre-trained model from the <a href="https://spacy.io/">spaCy</a> library to deidentify text.</p>
 <p>What counts as deidentified? My advice—ask the IRB. The lowest bar is removing any two word names (e.g., “John Smith”, but “John” would not be removed). Higher bars may require eliminating all names, places and institutions.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>replace_ner(<span class="st">"My name is Benjamin Lira"</span>, level <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "My name is [NAME]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>replace_ner(<span class="st">"My name is Benjamin Lira"</span>, level <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "My name is [NAME]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We can do this to a dataframe.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>deidentify_dataframe(df, input_text_column <span class="op">=</span> <span class="st">"some text column"</span>, output_text_column <span class="op">=</span> <span class="st">"redacted"</span>, id_column<span class="op">=</span><span class="va">None</span>, level<span class="op">=</span><span class="dv">1</span>, save<span class="op">=</span><span class="va">False</span>, output_filename<span class="op">=</span><span class="st">"deidentified_data.csv"</span>):</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                               some text  <span class="bu">id</span>                          redacted</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  this <span class="kw">is</span> some text about Benjamin Lira   <span class="dv">1</span>  this <span class="kw">is</span> some text about [PERSON]</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>                 this <span class="kw">is</span> some more text   <span class="dv">2</span>            this <span class="kw">is</span> some more text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>deidentify_dataframe(df, input_text_column <span class="op">=</span> <span class="st">"some text column"</span>, output_text_column <span class="op">=</span> <span class="st">"redacted"</span>, id_column<span class="op">=</span><span class="va">None</span>, level<span class="op">=</span><span class="dv">1</span>, save<span class="op">=</span><span class="va">False</span>, output_filename<span class="op">=</span><span class="st">"deidentified_data.csv"</span>):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                               some text  <span class="bu">id</span>                          redacted</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span>  this <span class="kw">is</span> some text about Benjamin Lira   <span class="dv">1</span>  this <span class="kw">is</span> some text about [PERSON]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>                 this <span class="kw">is</span> some more text   <span class="dv">2</span>            this <span class="kw">is</span> some more text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="topic-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="topic-modeling">Topic Modeling</h2>
@@ -207,23 +216,23 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="phmjorpwht" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#phmjorpwht table {
+<div id="eugwojyyxe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eugwojyyxe table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#phmjorpwht thead, #phmjorpwht tbody, #phmjorpwht tfoot, #phmjorpwht tr, #phmjorpwht td, #phmjorpwht th {
+#eugwojyyxe thead, #eugwojyyxe tbody, #eugwojyyxe tfoot, #eugwojyyxe tr, #eugwojyyxe td, #eugwojyyxe th {
   border-style: none;
 }
 
-#phmjorpwht p {
+#eugwojyyxe p {
   margin: 0;
   padding: 0;
 }
 
-#phmjorpwht .gt_table {
+#eugwojyyxe .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -249,12 +258,12 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-left-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_caption {
+#eugwojyyxe .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#phmjorpwht .gt_title {
+#eugwojyyxe .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -266,7 +275,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-width: 0;
 }
 
-#phmjorpwht .gt_subtitle {
+#eugwojyyxe .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -278,7 +287,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-top-width: 0;
 }
 
-#phmjorpwht .gt_heading {
+#eugwojyyxe .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -290,13 +299,13 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_bottom_border {
+#eugwojyyxe .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_col_headings {
+#eugwojyyxe .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -311,7 +320,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_col_heading {
+#eugwojyyxe .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -331,7 +340,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   overflow-x: hidden;
 }
 
-#phmjorpwht .gt_column_spanner_outer {
+#eugwojyyxe .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -343,15 +352,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 4px;
 }
 
-#phmjorpwht .gt_column_spanner_outer:first-child {
+#eugwojyyxe .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#phmjorpwht .gt_column_spanner_outer:last-child {
+#eugwojyyxe .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#phmjorpwht .gt_column_spanner {
+#eugwojyyxe .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -363,11 +372,11 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   width: 100%;
 }
 
-#phmjorpwht .gt_spanner_row {
+#eugwojyyxe .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#phmjorpwht .gt_group_heading {
+#eugwojyyxe .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -393,7 +402,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   text-align: left;
 }
 
-#phmjorpwht .gt_empty_group_heading {
+#eugwojyyxe .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -408,15 +417,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   vertical-align: middle;
 }
 
-#phmjorpwht .gt_from_md > :first-child {
+#eugwojyyxe .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#phmjorpwht .gt_from_md > :last-child {
+#eugwojyyxe .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#phmjorpwht .gt_row {
+#eugwojyyxe .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -435,7 +444,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   overflow-x: hidden;
 }
 
-#phmjorpwht .gt_stub {
+#eugwojyyxe .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -448,7 +457,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#phmjorpwht .gt_stub_row_group {
+#eugwojyyxe .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -462,15 +471,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   vertical-align: top;
 }
 
-#phmjorpwht .gt_row_group_first td {
+#eugwojyyxe .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#phmjorpwht .gt_row_group_first th {
+#eugwojyyxe .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#phmjorpwht .gt_summary_row {
+#eugwojyyxe .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -480,16 +489,16 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#phmjorpwht .gt_first_summary_row {
+#eugwojyyxe .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_first_summary_row.thick {
+#eugwojyyxe .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#phmjorpwht .gt_last_summary_row {
+#eugwojyyxe .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -499,7 +508,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_grand_summary_row {
+#eugwojyyxe .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -509,7 +518,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#phmjorpwht .gt_first_grand_summary_row {
+#eugwojyyxe .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -519,7 +528,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-top-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_last_grand_summary_row_top {
+#eugwojyyxe .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -529,11 +538,11 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_striped {
+#eugwojyyxe .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#phmjorpwht .gt_table_body {
+#eugwojyyxe .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -542,7 +551,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_footnotes {
+#eugwojyyxe .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -556,7 +565,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_footnote {
+#eugwojyyxe .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -565,7 +574,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#phmjorpwht .gt_sourcenotes {
+#eugwojyyxe .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -579,7 +588,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#phmjorpwht .gt_sourcenote {
+#eugwojyyxe .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -587,63 +596,63 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#phmjorpwht .gt_left {
+#eugwojyyxe .gt_left {
   text-align: left;
 }
 
-#phmjorpwht .gt_center {
+#eugwojyyxe .gt_center {
   text-align: center;
 }
 
-#phmjorpwht .gt_right {
+#eugwojyyxe .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#phmjorpwht .gt_font_normal {
+#eugwojyyxe .gt_font_normal {
   font-weight: normal;
 }
 
-#phmjorpwht .gt_font_bold {
+#eugwojyyxe .gt_font_bold {
   font-weight: bold;
 }
 
-#phmjorpwht .gt_font_italic {
+#eugwojyyxe .gt_font_italic {
   font-style: italic;
 }
 
-#phmjorpwht .gt_super {
+#eugwojyyxe .gt_super {
   font-size: 65%;
 }
 
-#phmjorpwht .gt_footnote_marks {
+#eugwojyyxe .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#phmjorpwht .gt_asterisk {
+#eugwojyyxe .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#phmjorpwht .gt_indent_1 {
+#eugwojyyxe .gt_indent_1 {
   text-indent: 5px;
 }
 
-#phmjorpwht .gt_indent_2 {
+#eugwojyyxe .gt_indent_2 {
   text-indent: 10px;
 }
 
-#phmjorpwht .gt_indent_3 {
+#eugwojyyxe .gt_indent_3 {
   text-indent: 15px;
 }
 
-#phmjorpwht .gt_indent_4 {
+#eugwojyyxe .gt_indent_4 {
   text-indent: 20px;
 }
 
-#phmjorpwht .gt_indent_5 {
+#eugwojyyxe .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -681,40 +690,40 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
 <section id="gpt-coding" class="level2">
 <h2 class="anchored" data-anchor-id="gpt-coding">GPT-coding</h2>
 <p>I have created a function that will take care of this for you. See example usage below:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>openai.api_key <span class="op">=</span> <span class="st">"YOUR_OPENAI_API_KEY"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data.csv"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>custom_prompt <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">I will show you a comment a participant in a scientific study gave to a vignette in which the following happens.</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">Tom tells Jeff that his car broke down in a rural place.</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">Jeff tells Tom that he read a meta-analysis that shows that people who live in rural places are more likely to helpful.</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">The participant wrote a comment about this vignette, about what Jeff is doing.</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">Please respond with a 1 if the participant believes that Jeff is providing an explanation for why Tom's car broke down.</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">Respond with a 0 if the participant does not believe that Jeff is providing an explanation for why Tom's car broke down.</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">Your response should be formatted as a python dictionary, with spaces for the rating and an explanation for it.</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>ratings_df <span class="op">=</span> generate_ratings(data, <span class="st">"id"</span>, <span class="st">"comments"</span>, custom_prompt, <span class="st">"data/ratings_binary"</span>, verbose<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>ratings_df.to_csv(<span class="st">"ratings_binary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>openai.api_key <span class="op">=</span> <span class="st">"YOUR_OPENAI_API_KEY"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"data.csv"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>custom_prompt <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">I will show you a comment a participant in a scientific study gave to a vignette in which the following happens.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">Tom tells Jeff that his car broke down in a rural place.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">Jeff tells Tom that he read a meta-analysis that shows that people who live in rural places are more likely to helpful.</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">The participant wrote a comment about this vignette, about what Jeff is doing.</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">Please respond with a 1 if the participant believes that Jeff is providing an explanation for why Tom's car broke down.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">Respond with a 0 if the participant does not believe that Jeff is providing an explanation for why Tom's car broke down.</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="st">Your response should be formatted as a python dictionary, with spaces for the rating and an explanation for it.</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>ratings_df <span class="op">=</span> generate_ratings(data, <span class="st">"id"</span>, <span class="st">"comments"</span>, custom_prompt, <span class="st">"data/ratings_binary"</span>, verbose<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>ratings_df.to_csv(<span class="st">"ratings_binary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will produce a dataset like the one shown below.</p>
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="jutonwcllp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jutonwcllp table {
+<div id="ppngtnvlxm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ppngtnvlxm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jutonwcllp thead, #jutonwcllp tbody, #jutonwcllp tfoot, #jutonwcllp tr, #jutonwcllp td, #jutonwcllp th {
+#ppngtnvlxm thead, #ppngtnvlxm tbody, #ppngtnvlxm tfoot, #ppngtnvlxm tr, #ppngtnvlxm td, #ppngtnvlxm th {
   border-style: none;
 }
 
-#jutonwcllp p {
+#ppngtnvlxm p {
   margin: 0;
   padding: 0;
 }
 
-#jutonwcllp .gt_table {
+#ppngtnvlxm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -740,12 +749,12 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-left-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_caption {
+#ppngtnvlxm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jutonwcllp .gt_title {
+#ppngtnvlxm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -757,7 +766,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-width: 0;
 }
 
-#jutonwcllp .gt_subtitle {
+#ppngtnvlxm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -769,7 +778,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-top-width: 0;
 }
 
-#jutonwcllp .gt_heading {
+#ppngtnvlxm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -781,13 +790,13 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_bottom_border {
+#ppngtnvlxm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_col_headings {
+#ppngtnvlxm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -802,7 +811,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_col_heading {
+#ppngtnvlxm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -822,7 +831,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   overflow-x: hidden;
 }
 
-#jutonwcllp .gt_column_spanner_outer {
+#ppngtnvlxm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -834,15 +843,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 4px;
 }
 
-#jutonwcllp .gt_column_spanner_outer:first-child {
+#ppngtnvlxm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jutonwcllp .gt_column_spanner_outer:last-child {
+#ppngtnvlxm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jutonwcllp .gt_column_spanner {
+#ppngtnvlxm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -854,11 +863,11 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   width: 100%;
 }
 
-#jutonwcllp .gt_spanner_row {
+#ppngtnvlxm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jutonwcllp .gt_group_heading {
+#ppngtnvlxm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -884,7 +893,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   text-align: left;
 }
 
-#jutonwcllp .gt_empty_group_heading {
+#ppngtnvlxm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -899,15 +908,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   vertical-align: middle;
 }
 
-#jutonwcllp .gt_from_md > :first-child {
+#ppngtnvlxm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jutonwcllp .gt_from_md > :last-child {
+#ppngtnvlxm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jutonwcllp .gt_row {
+#ppngtnvlxm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -926,7 +935,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   overflow-x: hidden;
 }
 
-#jutonwcllp .gt_stub {
+#ppngtnvlxm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -939,7 +948,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#jutonwcllp .gt_stub_row_group {
+#ppngtnvlxm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -953,15 +962,15 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   vertical-align: top;
 }
 
-#jutonwcllp .gt_row_group_first td {
+#ppngtnvlxm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jutonwcllp .gt_row_group_first th {
+#ppngtnvlxm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jutonwcllp .gt_summary_row {
+#ppngtnvlxm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -971,16 +980,16 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#jutonwcllp .gt_first_summary_row {
+#ppngtnvlxm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_first_summary_row.thick {
+#ppngtnvlxm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jutonwcllp .gt_last_summary_row {
+#ppngtnvlxm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -990,7 +999,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_grand_summary_row {
+#ppngtnvlxm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1000,7 +1009,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#jutonwcllp .gt_first_grand_summary_row {
+#ppngtnvlxm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1010,7 +1019,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-top-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_last_grand_summary_row_top {
+#ppngtnvlxm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1020,11 +1029,11 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_striped {
+#ppngtnvlxm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jutonwcllp .gt_table_body {
+#ppngtnvlxm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1033,7 +1042,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-bottom-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_footnotes {
+#ppngtnvlxm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1047,7 +1056,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_footnote {
+#ppngtnvlxm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1056,7 +1065,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#jutonwcllp .gt_sourcenotes {
+#ppngtnvlxm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1070,7 +1079,7 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   border-right-color: #D3D3D3;
 }
 
-#jutonwcllp .gt_sourcenote {
+#ppngtnvlxm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1078,63 +1087,63 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
   padding-right: 5px;
 }
 
-#jutonwcllp .gt_left {
+#ppngtnvlxm .gt_left {
   text-align: left;
 }
 
-#jutonwcllp .gt_center {
+#ppngtnvlxm .gt_center {
   text-align: center;
 }
 
-#jutonwcllp .gt_right {
+#ppngtnvlxm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jutonwcllp .gt_font_normal {
+#ppngtnvlxm .gt_font_normal {
   font-weight: normal;
 }
 
-#jutonwcllp .gt_font_bold {
+#ppngtnvlxm .gt_font_bold {
   font-weight: bold;
 }
 
-#jutonwcllp .gt_font_italic {
+#ppngtnvlxm .gt_font_italic {
   font-style: italic;
 }
 
-#jutonwcllp .gt_super {
+#ppngtnvlxm .gt_super {
   font-size: 65%;
 }
 
-#jutonwcllp .gt_footnote_marks {
+#ppngtnvlxm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jutonwcllp .gt_asterisk {
+#ppngtnvlxm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jutonwcllp .gt_indent_1 {
+#ppngtnvlxm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jutonwcllp .gt_indent_2 {
+#ppngtnvlxm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jutonwcllp .gt_indent_3 {
+#ppngtnvlxm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jutonwcllp .gt_indent_4 {
+#ppngtnvlxm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jutonwcllp .gt_indent_5 {
+#ppngtnvlxm .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1180,13 +1189,13 @@ IDF = \log{\frac{\text{Total number of documents}}{\text{Number of documents tha
 <section id="word-clouds" class="level2">
 <h2 class="anchored" data-anchor-id="word-clouds">Word Clouds</h2>
 <p>While some people don’t like word clouds, I like them for displaying frequencies and some metric of importance (like model attribution scores, or correlations). Somehow, there is no great python function for this, so I made one that will take a dataframe with a column with words, and two other numeric columns to be mapped into size and color.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"word"</span> : [<span class="st">"word1"</span>, <span class="st">"word2"</span>, <span class="st">"word3"</span>, <span class="st">"word4"</span>, <span class="st">"word5"</span>, <span class="st">"word6"</span>, <span class="st">"word7"</span>, <span class="st">"word8"</span>, <span class="st">"word9"</span>, <span class="st">"word10"</span>],</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"size"</span> : [<span class="dv">100</span>, <span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">70</span>, <span class="dv">60</span>, <span class="dv">50</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>],</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"color"</span> : [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>]</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>create_word_cloud(df, <span class="st">"word"</span>, <span class="st">"size"</span>, <span class="st">"color"</span>, title_font_size<span class="op">=</span><span class="dv">130</span>, log_scale<span class="op">=</span><span class="va">False</span>, out<span class="op">=</span>[<span class="st">"png"</span>, <span class="st">"pdf"</span>], font_filename<span class="op">=</span><span class="st">"Myriad Pro Regular.ttf"</span>, output_file<span class="op">=</span><span class="st">"wordcloud"</span>, plot_title<span class="op">=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"word"</span> : [<span class="st">"word1"</span>, <span class="st">"word2"</span>, <span class="st">"word3"</span>, <span class="st">"word4"</span>, <span class="st">"word5"</span>, <span class="st">"word6"</span>, <span class="st">"word7"</span>, <span class="st">"word8"</span>, <span class="st">"word9"</span>, <span class="st">"word10"</span>],</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"size"</span> : [<span class="dv">100</span>, <span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">70</span>, <span class="dv">60</span>, <span class="dv">50</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>],</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"color"</span> : [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>create_word_cloud(df, <span class="st">"word"</span>, <span class="st">"size"</span>, <span class="st">"color"</span>, title_font_size<span class="op">=</span><span class="dv">130</span>, log_scale<span class="op">=</span><span class="va">False</span>, out<span class="op">=</span>[<span class="st">"png"</span>, <span class="st">"pdf"</span>], font_filename<span class="op">=</span><span class="st">"Myriad Pro Regular.ttf"</span>, output_file<span class="op">=</span><span class="st">"wordcloud"</span>, plot_title<span class="op">=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Produces this: <img src="wordcloud.png" class="img-fluid" alt="Example word cloud"></p>
 </section>
 </section>

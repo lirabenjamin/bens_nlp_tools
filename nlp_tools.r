@@ -96,5 +96,5 @@ data = tibble(text = c(
 ))
 
 # # Example usage:
-data <- arrow::read_parquet("full.parquet")
-run_topic_model(data, "response", "test", n_topics = 20, sample = TRUE, sample_size = 1000)
+# data <- arrow::read_parquet("full.parquet")
+# run_topic_model(data, "response", "test", n_topics = 20, sample = TRUE, sample_size = 1000)

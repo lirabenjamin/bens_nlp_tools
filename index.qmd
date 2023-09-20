@@ -2,6 +2,21 @@
 title: Ben's NLP tools
 ---
 
+If you use functions here, please cite them!
+
+Lira, B. (2023). Ben’s NLP Tools (1.00) [R and Python code]. https://github.com/lirabenjamin/bens_nlp_tools
+
+```bibtex
+@misc{benjamin2023,
+  title = {Ben's {{NLP Tools}}},
+  author = {Lira, Benjamin},
+  year = {2023},
+  month = sep,
+  urldate = {2023-09-20}
+}
+```
+
+
 # What is NLP?
 
 Natural language processing is simply analyzing text data. This can be as simple as counting words, or as complex as generating text. This is a short tutorial on some tools I've built to help analyze text data.
