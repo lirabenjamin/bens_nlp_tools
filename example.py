@@ -1,6 +1,8 @@
 import pandas as pd
 import nlp_tools as nlp
 import openai
+from dotenv import load_dotenv
+import os
 
 # I have a dataset of movie reviews
 df = pd.read_csv('IMDB Dataset.csv')
@@ -25,13 +27,14 @@ nlp.count_dictionary_matches(deidentified_df, text_column = "deidentified_review
 # Topic Modeling
 
 # GPT Rating
-df['id']  = df.index
-openai.api_key = "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"
+deidentified_df['id']  = deidentified_df.index
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_KEY")
 custom_prompt = """
 I will show you a list of movie reviews.
 Please respond with a 1 if the participant liked the movie.
 Respond with a 0 if the participant did not like the movie.
 Your response should be formatted as a python dictionary, with spaces for an explanation for your rating and an your rating.
 """
-ratings_df = nlp.generate_ratings(deidentified_df, "index", "review", custom_prompt, "data/ratings_binary", verbose=True)
+ratings_df = nlp.generate_ratings(deidentified_df, "id", "deidentified_review", custom_prompt, "data/ratings_binary", verbose=True)
 ratings_df.to_csv("ratings_binary.csv", index=False)

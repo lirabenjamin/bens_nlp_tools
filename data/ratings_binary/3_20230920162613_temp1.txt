@@ -1,0 +1,1 @@
+{"rating": 0, "explanation": "The participant gave the movie a low score, 3 out of 10, indicating they did not enjoy the movie. In particular, they criticized the plot and genre mix, showing dissatisfaction with the movie."}
