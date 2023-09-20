@@ -2,6 +2,20 @@
 
 This script provides access to some basic NLP tools, like LIWC, Deidentification with Named Entity Recognition, using ChatGPT to rate text, and more.
 
+Please cite this repository if you use it in your work:
+
+Lira, B. (2023). Ben’s NLP Tools (1.00) [R and Python code]. https://github.com/lirabenjamin/bens_nlp_tools
+
+```bibtex
+@misc{benjamin2023,
+  title = {Ben's {{NLP Tools}}},
+  author = {Lira, Benjamin},
+  year = {2023},
+  month = sep,
+  urldate = {2023-09-20}
+}
+```
+
 ## Installation
 
 To install, complete the following steps:
