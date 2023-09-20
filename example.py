@@ -24,10 +24,11 @@ dictionary = [r"horror", r"gore", r"scary"]
 dictionary = [r"love"]
 nlp.count_dictionary_matches(deidentified_df, text_column = "deidentified_review", mode = "count",dictionary=dictionary)
 nlp.count_dictionary_matches(deidentified_df, text_column = "deidentified_review", mode = "proportion",dictionary=dictionary)
+
 # Topic Modeling
+# See example.r script
 
 # GPT Rating
-deidentified_df['id']  = deidentified_df.index
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_KEY")
 custom_prompt = """
@@ -36,5 +37,7 @@ Please respond with a 1 if the participant liked the movie.
 Respond with a 0 if the participant did not like the movie.
 Your response should be formatted as a python dictionary, with spaces for an explanation for your rating and an your rating.
 """
-ratings_df = nlp.generate_ratings(deidentified_df, "id", "deidentified_review", custom_prompt, "data/ratings_binary", verbose=True)
+ratings_df = nlp.generate_ratings(deidentified_df, id_col = "index", text_col= "deidentified_review", prompt= custom_prompt, output_dir= "data/ratings_binary", verbose=True)
 ratings_df.to_csv("ratings_binary.csv", index=False)
+
+

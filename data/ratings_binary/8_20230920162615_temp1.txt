@@ -1,4 +1,0 @@
-{
-"explanation": "The participant did not like the movie as they criticized almost every aspect of it such as the editing, pacing, storyline, acting, and soundtrack. They also described the film as cheap, nasty, and boring. The only positive comment was towards an actor's performance, but that was not enough to redeem the movie for them.",
-"rating": 0
-}

@@ -1,0 +1,4 @@
+{
+"explanation": "The participant enjoyed the movie, mentioning they found it lighthearted, witty, and preferable to other movies.", 
+"rating": 1
+}

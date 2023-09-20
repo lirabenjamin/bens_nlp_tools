@@ -1,0 +1,1 @@
+{"explanation": "The participant found the movie slow and was disappointed with the genre mix of drama and thriller. They gave it a low rating of 3 out of 10, indicating dissatisfaction.", "rating": 0}

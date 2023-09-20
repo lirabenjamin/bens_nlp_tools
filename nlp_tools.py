@@ -126,7 +126,7 @@ def deidentify_dataframe(df, input_text_column, output_text_column, id_column=No
 # Add topics
 
 # Add GPT rating
-def generate_ratings(data: pd.DataFrame, id_col: str, text_col: str, prompt: str, output_dir: str, verbose: bool = False) -> pd.DataFrame:
+def generate_ratings(data: pd.DataFrame, id_col: str, text_col: str, prompt: str, output_dir: str, verbose: bool = False, temperature = 1, keep_details = True) -> pd.DataFrame:
     import openai
     import concurrent.futures
     import os
@@ -143,7 +143,7 @@ def generate_ratings(data: pd.DataFrame, id_col: str, text_col: str, prompt: str
     def rate_conversation(id, conversation):
         response = openai.ChatCompletion.create(
             model="gpt-4",
-            temperature=1,
+            temperature=temperature,
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": f"Here are the participant comments:\n{conversation}"},
@@ -169,12 +169,15 @@ def generate_ratings(data: pd.DataFrame, id_col: str, text_col: str, prompt: str
                 df_list.append({"filename": filename, "content": content})
 
         return pd.DataFrame(df_list)
-
+    
+    
     combined_df = read_all_files_to_dataframe(output_dir)
-    combined_df.columns = ["id", "content"]
-    combined_df["id"] = combined_df["id"].str.replace(f"{output_dir}/", "")
-    combined_df["id"] = combined_df["id"].str.replace(".txt", "")
-    combined_df[["id", "timestamp", "temp"]] = combined_df["id"].str.split("_", expand=True)
+    if combined_df.empty:
+        raise ValueError("No data read from the output directory. Ensure .txt files exist in the directory.")
+    combined_df.columns = [id_col, "content"]
+    combined_df[id_col] = combined_df[id_col].str.replace(f"{output_dir}/", "")
+    combined_df[id_col] = combined_df[id_col].str.replace(".txt", "")
+    combined_df[[id_col, "timestamp", "temperature"]] = combined_df[id_col].str.split("_", expand=True)
 
     # Unroll the dictionary
     combined_df["content"] = combined_df["content"].apply(ast.literal_eval)
@@ -182,10 +185,11 @@ def generate_ratings(data: pd.DataFrame, id_col: str, text_col: str, prompt: str
 
     # Combine df and combined_df
     df = pd.concat([combined_df, df], axis=1)
-    df = df.drop(["content", "timestamp", "temp"], axis=1)
+    if not keep_details:
+        df = df.drop(["content", "timestamp", "temp"], axis=1)
     
     # Join df with data on id
-    df['id'] = df['id'].astype(int)
+    df[id_col] = df[id_col].astype(int)
     df = df.merge(data, on=id_col)
 
     return df
